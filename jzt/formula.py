@@ -16,7 +16,7 @@ chineselayout=0x08040804
 chineselayout_oct=134481924
 
 #办公室笔记本
-desktop_mouseclickposition=(200,200)
+desktop_mouseclickposition=(600,200)
 
 current_mouseclickposition=desktop_mouseclickposition
 
@@ -140,7 +140,7 @@ def  grap_formula_runing_variable(filepath,speed=2):
         print("输入法正常")
     autoit.win_activate("金字塔决策交易系统")
     autoit.mouse_click("left",*current_mouseclickposition)
-    for i in range(2000):
+    for i in range(500):
         autoit.send("{DOWN}")
         time.sleep(0.0001*speed)
         
@@ -149,9 +149,9 @@ def  grap_formula_runing_variable(filepath,speed=2):
     time.sleep(0.5*speed)
     pwkl.change_foreground_window_keyboard_layout(englishlayout)
     pyautogui.hotkey("shift","q")
-    time.sleep(1*speed)
+    time.sleep(0.5*speed)
     autoit.mouse_click("left",*current_mouseclickposition)
-    time.sleep(1*speed)
+    time.sleep(0.5*speed)
     pwkl.change_foreground_window_keyboard_layout(englishlayout)
     pyautogui.hotkey("ctrl","a")
     time.sleep(0.5*speed )
@@ -162,14 +162,14 @@ def  grap_formula_runing_variable(filepath,speed=2):
     autoit.send("{esc}")
     time.sleep(0.5*speed)
     data=pyperclip.paste()
-    print(data[:10])
+    print(data[:35])
     with open(filepath,mode='a',encoding="utf8") as f:
         f.write('\n')
         f.write(data)
     print("end")
 
 
-def grap_formula_runing_variable_batch(filepath,product="IF00",cyclelist=["4","5","6"],speed=2):
+def grap_formula_runing_variable_batch(filepath,formula=None,product="IF00",cyclelist=["4","5","6"],speed=2):
     """依次批量抓取同一个品种的不同周期的数据
     4:30min,5:60min,6:day
     note:需要管理员权限
@@ -179,7 +179,13 @@ def grap_formula_runing_variable_batch(filepath,product="IF00",cyclelist=["4","5
     pwkl.change_foreground_window_keyboard_layout(englishlayout)
     autoit.send(product)
     autoit.send("{enter}")  #回车键
-    time.sleep(1*speed)
+    time.sleep(0.5*speed)
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    autoit.send("demo")
+    autoit.send("{enter}")  #回车键
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    autoit.send(formula)
+    autoit.send("{enter}")  #回车键
     
     for cycle in cyclelist:
         print(cycle) 
@@ -199,3 +205,114 @@ def grap_formula_runing_variable_batch(filepath,product="IF00",cyclelist=["4","5
         grap_formula_runing_variable(filepath)
         time.sleep(0.5*speed)
     pwkl.change_foreground_window_keyboard_layout(chineselayout)
+
+
+
+def request_historydata(product="IF00",cycle="6",speed=2):
+    """
+    不断请求历史数据
+    """
+    autoit.win_activate("金字塔决策交易系统")
+    autoit.mouse_click("left",*current_mouseclickposition)
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    autoit.send(product)
+    time.sleep(0.5*speed)
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    autoit.send("{enter}")  #回车键
+    time.sleep(1*speed)
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    autoit.send(cycle)
+    time.sleep(0.5*speed)
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    autoit.send("{enter}")  #回车键
+
+    for i in range(100):
+        pwkl.change_foreground_window_keyboard_layout(englishlayout)
+        pyautogui.hotkey("ctrl","home")
+        time.sleep(0.5*speed)
+        for j in range(5):
+            pwkl.change_foreground_window_keyboard_layout(englishlayout)
+            autoit.send("{LEFT}")
+            time.sleep(1*speed)
+            pyautogui.hotkey("left")
+
+        for j in range(5):
+            pwkl.change_foreground_window_keyboard_layout(englishlayout)
+            autoit.send("{DOWN}")
+            time.sleep(1*speed)
+            pyautogui.hotkey("down")
+        
+
+
+def grap_formula_runing_variable_ZhuK(filepath,product="IF00",cycle="6",speed=2):
+    """依次批量抓取同一个品种的不同周期的数据
+    4:30min,5:60min,6:day
+    note:需要管理员权限
+    """
+    autoit.win_activate("金字塔决策交易系统")
+    autoit.mouse_click("left",*current_mouseclickposition)
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    autoit.send(product)
+    time.sleep(0.5*speed)
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    autoit.send("{enter}")  #回车键
+    time.sleep(1*speed)
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    autoit.send(cycle)
+    time.sleep(0.5*speed)
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    autoit.send("{enter}")  #回车键
+
+    if ensure_englishlayout():
+        print("输入法正常")
+    autoit.win_activate("金字塔决策交易系统")
+    autoit.mouse_click("left",*current_mouseclickposition)
+    for i in range(2000):
+        autoit.send("{DOWN}")
+        time.sleep(0.0001*speed)
+    print("拉取数据结束")
+
+    autoit.win_activate("金字塔决策交易系统")
+    autoit.mouse_click("left",*current_mouseclickposition)
+    pyautogui.hotkey("ctrl","home")
+    time.sleep(0.5*speed)
+
+    currentdate=''
+
+    for i  in range(1000000000):
+
+        pwkl.change_foreground_window_keyboard_layout(englishlayout)
+        pyautogui.hotkey("shift","q")
+        time.sleep(1*speed)
+        autoit.mouse_click("left",*current_mouseclickposition)
+        time.sleep(1*speed)
+        pwkl.change_foreground_window_keyboard_layout(englishlayout)
+        pyautogui.hotkey("ctrl","a")
+        time.sleep(0.5*speed )
+        pwkl.change_foreground_window_keyboard_layout(englishlayout)
+        pyautogui.hotkey("ctrl","c")
+        time.sleep(0.5*speed )
+        pwkl.change_foreground_window_keyboard_layout(englishlayout)
+        autoit.send("{esc}")
+        time.sleep(0.5*speed)
+        data=pyperclip.paste()
+        
+        pattern=re.compile('\<(.*?)\>',re.S)
+        strs = pattern.findall(data)
+        productstr = strs[0]
+        datenum =data.find('时间:')
+        datestr = data[datenum+3:datenum+3+17]
+
+        if currentdate != datestr:
+            currentdate =datestr
+            with open(filepath,mode='a',encoding="utf8") as f:
+                f.write('\n')
+                f.write(data)
+        else:
+            break
+        
+        print(productstr,currentdate)
+
+        pwkl.change_foreground_window_keyboard_layout(englishlayout)
+        pyautogui.hotkey("right")
+        time.sleep(0.5*speed)
