@@ -8,7 +8,7 @@ long_description="""
 """
 setuptools.setup(
     name="jzt",
-    version="0.0.3",
+    version="0.0.4",
     author="wangpeng",
     author_email="andrew361x@hotmail.com",
     description="a library use for weistock",
