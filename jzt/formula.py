@@ -140,9 +140,9 @@ def  grap_formula_runing_variable(filepath,speed=2):
         print("输入法正常")
     autoit.win_activate("金字塔决策交易系统")
     autoit.mouse_click("left",*current_mouseclickposition)
-    for i in range(500):
+    for i in range(10):
         autoit.send("{DOWN}")
-        time.sleep(0.0001*speed)
+        time.sleep(2*speed)
         
     pwkl.change_foreground_window_keyboard_layout(englishlayout)
     pyautogui.hotkey("ctrl","end")
@@ -202,10 +202,49 @@ def grap_formula_runing_variable_batch(filepath,formula=None,product="IF00",cycl
         pwkl.change_foreground_window_keyboard_layout(englishlayout)
         autoit.send("{enter}")  #回车键
         time.sleep(0.5*speed)
-        grap_formula_runing_variable(filepath)
+        grap_formula_runing_variable(filepath,speed=speed)
         time.sleep(0.5*speed)
     pwkl.change_foreground_window_keyboard_layout(chineselayout)
 
+
+
+def grap_formula_runing_variable_batch2(filepath,subfunction=None,product="IF00",cyclelist=["4","5","6"],speed=2):
+    """依次批量抓取同一个品种的不同周期的数据
+    4:30min,5:60min,6:day
+    note:需要管理员权限
+    """
+    autoit.win_activate("金字塔决策交易系统")
+    autoit.mouse_click("left",*current_mouseclickposition)
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    autoit.send(product)
+    autoit.send("{enter}")  #回车键
+    time.sleep(0.5*speed)
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    #autoit.send("demo")
+    #autoit.send("{enter}")  #回车键
+    pwkl.change_foreground_window_keyboard_layout(englishlayout)
+    pyautogui.hotkey("alt","F8")
+    autoit.send(subfunction)
+    autoit.send("{enter}")  #回车键
+    
+    for cycle in cyclelist:
+        print(cycle) 
+        autoit.win_activate("金字塔决策交易系统")
+        autoit.mouse_click("left",*current_mouseclickposition)
+        pwkl.change_foreground_window_keyboard_layout(englishlayout)
+        autoit.send(product)
+        time.sleep(0.5*speed)
+        autoit.send("{enter}")  #回车键
+        time.sleep(0.5*speed)
+        pwkl.change_foreground_window_keyboard_layout(englishlayout)
+        autoit.send(cycle)  
+        time.sleep(0.5*speed)
+        pwkl.change_foreground_window_keyboard_layout(englishlayout)
+        autoit.send("{enter}")  #回车键
+        time.sleep(0.5*speed)
+        grap_formula_runing_variable(filepath,speed=speed)
+        time.sleep(0.5*speed)
+    pwkl.change_foreground_window_keyboard_layout(chineselayout)
 
 
 def request_historydata(product="IF00",cycle="6",speed=2):
@@ -270,6 +309,7 @@ def grap_formula_runing_variable_ZhuK(filepath,product="IF00",cycle="6",speed=2)
     for i in range(2000):
         autoit.send("{DOWN}")
         time.sleep(0.0001*speed)
+        pyautogui.hotkey("ctrl","home")
     print("拉取数据结束")
 
     autoit.win_activate("金字塔决策交易系统")
